@@ -1,0 +1,56 @@
+name: Benchmark
+
+on:
+  push:
+    branches:
+      - main  # Or your main branch name
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Find changed projects
+        id: changed-projects
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} HEAD)
+          CHANGED_PROJECTS=$(echo "$CHANGED_FILES" | grep -E 'day_[0-9]+' | awk -F/ '{print $1}')
+          echo "changed_projects=$CHANGED_PROJECTS" >> $GITHUB_OUTPUT
+
+
+      - name: Print changed projects
+        run: |
+          echo "Changed projects: ${{ steps.changed-projects.outputs.changed_projects }}"
+
+
+      - name: Build projects
+        run: |
+          for project in ${{ steps.changed-projects.outputs.changed_projects }}; do
+            cd $project
+            tsc ./$project.ts
+            cd ..
+          done
+
+      - name: Run benchmarks and send to Discord
+        run: |
+          for project in ${{ steps.changed-projects.outputs.changed_projects }}; do
+            output=$(hyperfine --warmup 10 node ./$project/$project.js)
+            escaped_output=$(echo "$output" | sed ':a;N;$!ba;s/\n/\\n/g')
+            
+            message="{\"content\": \"Benchmark results for **$project**:\n\`\`\`\n$escaped_output\n\`\`\`\"}"
+            
+            curl -H "Content-Type: application/json" \
+                 -X POST \
+                 -d "$message" \
+                 ${{ secrets.DISCORD_WEBHOOK }}
+          done
