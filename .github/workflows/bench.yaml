@@ -56,7 +56,8 @@ jobs:
       - name: Run benchmarks and send to Discord
         run: |
           for project in ${{ steps.changed-projects.outputs.changed_projects }}; do
-            output=$(hyperfine --warmup 10 "node ./$project/$project.js")
+            cd $project
+            output=$(hyperfine --warmup 10 "node ./$project.js")
             escaped_output=$(echo "$output" | sed ':a;N;$!ba;s/\n/\\n/g')
             
             message="{\"content\": \"Benchmark results for **$project**:\n\`\`\`\n$escaped_output\n\`\`\`\"}"
@@ -65,4 +66,5 @@ jobs:
                  -X POST \
                  -d "$message" \
                  ${{ secrets.DISCORD_WEBHOOK }}
+           cd ..
           done
