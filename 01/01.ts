@@ -11,6 +11,7 @@ let rightAppearanceSum: number = 0;
 let rightColumnLowestIdx: number = 0;
 let previous_left: number = -1;
 let rightAppearanceCount: number = 0;
+
 for (let i = 0; i < numberCols.leftColumn.length; i++) {
   const leftColVal = numberCols.leftColumn[i];
   totalDistance += Math.abs(leftColVal - numberCols.rightColumn[i]);

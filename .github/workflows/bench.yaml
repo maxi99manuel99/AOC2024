@@ -54,8 +54,6 @@ jobs:
           done
 
       - name: Run benchmarks and send to Discord
-        env:
-            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           for project in ${{ steps.changed-projects.outputs.changed_projects }}; do
             cd $project
@@ -67,6 +65,6 @@ jobs:
             curl -H "Content-Type: application/json" \
                  -X POST \
                  -d "$message" \
-                "$DISCORD_WEBHOOK"
+                https://discord.com/api/webhooks/1180483124572987423/BCQjC7DcVI5Npgu1KJEnrL0hWTbxaH-GAEliAzTazzDmMV5JHEFt4C2Sn7G_pmbhqYDK
            cd ..
           done
