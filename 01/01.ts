@@ -16,17 +16,17 @@ for (let i = 0; i < numberCols.leftColumn.length; i++) {
   totalDistance += Math.abs(leftColVal - numberCols.rightColumn[i]);
   if (previous_left === leftColVal) {
     rightAppearanceSum += previous_left * rightAppearanceCount;
-    continue;
+  } else {
+    previous_left = leftColVal;
+    rightAppearanceCount = 0;
+    for (let j = rightColumnLowestIdx; j < numberCols.rightColumn.length; j++) {
+      const rightColVal = numberCols.rightColumn[j];
+      if (rightColVal > leftColVal) break;
+      else if (rightColVal === leftColVal) rightAppearanceCount++;
+      rightColumnLowestIdx = j;
+    }
+    rightAppearanceSum += leftColVal * rightAppearanceCount;
   }
-  previous_left = leftColVal;
-  rightAppearanceCount = 0;
-  for (let j = rightColumnLowestIdx; j < numberCols.rightColumn.length; j++) {
-    const rightColVal = numberCols.rightColumn[j];
-    if (rightColVal > leftColVal) break;
-    else if (rightColVal === leftColVal) rightAppearanceCount++;
-    rightColumnLowestIdx = j;
-  }
-  rightAppearanceSum += leftColVal * rightAppearanceCount;
 }
 
 console.log(`Part 1 solution: ${totalDistance}`);

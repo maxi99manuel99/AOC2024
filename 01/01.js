@@ -14,19 +14,20 @@ for (var i = 0; i < numberCols.leftColumn.length; i++) {
     totalDistance += Math.abs(leftColVal - numberCols.rightColumn[i]);
     if (previous_left === leftColVal) {
         rightAppearanceSum += previous_left * rightAppearanceCount;
-        continue;
     }
-    previous_left = leftColVal;
-    rightAppearanceCount = 0;
-    for (var j = rightColumnLowestIdx; j < numberCols.rightColumn.length; j++) {
-        var rightColVal = numberCols.rightColumn[j];
-        if (rightColVal > leftColVal)
-            break;
-        else if (rightColVal === leftColVal)
-            rightAppearanceCount++;
-        rightColumnLowestIdx = j;
+    else {
+        previous_left = leftColVal;
+        rightAppearanceCount = 0;
+        for (var j = rightColumnLowestIdx; j < numberCols.rightColumn.length; j++) {
+            var rightColVal = numberCols.rightColumn[j];
+            if (rightColVal > leftColVal)
+                break;
+            else if (rightColVal === leftColVal)
+                rightAppearanceCount++;
+            rightColumnLowestIdx = j;
+        }
+        rightAppearanceSum += leftColVal * rightAppearanceCount;
     }
-    rightAppearanceSum += leftColVal * rightAppearanceCount;
 }
 console.log("Part 1 solution: ".concat(totalDistance));
 console.log("Part 2 solution: ".concat(rightAppearanceSum));
