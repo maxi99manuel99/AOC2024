@@ -22,7 +22,7 @@ class FileReader {
     for (const line of lines) {
       const [left, right] = line.split(/\s+/); // Split by whitespace
 
-      // Apply type casting transform and push to columns
+      // Apply transform (e.g. type casting) and push to columns
       leftColumn.push(transform(left));
       rightColumn.push(transform(right));
     }
