@@ -19,7 +19,7 @@ var FileReader = /** @class */ (function () {
         for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
             var line = lines_1[_i];
             var _a = line.split(/\s+/), left = _a[0], right = _a[1]; // Split by whitespace
-            // Apply type casting transform and push to columns
+            // Apply transform (e.g. type casting) and push to columns
             leftColumn.push(transform(left));
             rightColumn.push(transform(right));
         }
