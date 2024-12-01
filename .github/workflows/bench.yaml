@@ -17,6 +17,20 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Cache hyperfine
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-hyperfine
+          restore-keys: |
+            ${{ runner.os }}-hyperfine-
+
+      - name: Install hyperfine (if not cached)
+        run: |
+          if [ ! -f ~/.cargo/bin/hyperfine ]; then
+            cargo install hyperfine
+          fi
+
       - name: Install dependencies
         run: npm install
 
@@ -27,11 +41,9 @@ jobs:
           CHANGED_PROJECTS=$(echo "$CHANGED_FILES" | grep -E '[0-9]+' | awk -F/ '{print $1}')
           echo "changed_projects=$CHANGED_PROJECTS" >> $GITHUB_OUTPUT
 
-
       - name: Print changed projects
         run: |
           echo "Changed projects: ${{ steps.changed-projects.outputs.changed_projects }}"
-
 
       - name: Build projects
         run: |
