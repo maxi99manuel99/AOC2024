@@ -9,16 +9,16 @@ numberCols.rightColumn.sort();
 let totalDistance: number = 0;
 let rightAppearanceSum: number = 0;
 let rightColumnLowestIdx: number = 0;
-let previous_left: number = -1;
+let previousLeft: number = -1;
 let rightAppearanceCount: number = 0;
 
 for (let i = 0; i < numberCols.leftColumn.length; i++) {
   const leftColVal = numberCols.leftColumn[i];
   totalDistance += Math.abs(leftColVal - numberCols.rightColumn[i]);
-  if (previous_left === leftColVal) {
-    rightAppearanceSum += previous_left * rightAppearanceCount;
+  if (previousLeft === leftColVal) {
+    rightAppearanceSum += previousLeft * rightAppearanceCount;
   } else {
-    previous_left = leftColVal;
+    previousLeft = leftColVal;
     rightAppearanceCount = 0;
     for (let j = rightColumnLowestIdx; j < numberCols.rightColumn.length; j++) {
       const rightColVal = numberCols.rightColumn[j];
