@@ -1,7 +1,7 @@
 import { FileReader } from "../utils";
 
 let numberCols: { leftColumn: number[]; rightColumn: number[] } =
-  FileReader.readColumnsSeperately("input.txt", (value) => Number(value));
+  FileReader.readTwoColumnsSeperately("input.txt", (value) => Number(value));
 
 numberCols.leftColumn.sort();
 numberCols.rightColumn.sort();
