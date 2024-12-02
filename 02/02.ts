@@ -48,6 +48,7 @@ function calculateNumValidReports(
     }
     validReportSum += valid ? 1 : 0;
   }
+
   return validReportSum;
 }
 
