@@ -38,7 +38,7 @@ jobs:
         id: changed-projects
         run: |
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} HEAD)
-          CHANGED_PROJECTS=$(echo "$CHANGED_FILES" | grep -E '[0-9]+' | awk -F/ '{print $1}')
+          CHANGED_PROJECTS=$(echo "$CHANGED_FILES" | grep -E '[0-9]+' | awk -F/ '{print $1}' | sort -u | paste -sd " ")
           echo "changed_projects=$CHANGED_PROJECTS" >> $GITHUB_OUTPUT
 
       - name: Print changed projects
