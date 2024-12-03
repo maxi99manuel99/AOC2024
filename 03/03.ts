@@ -10,31 +10,20 @@ function evalMul(mulStr: string): number {
 }
 
 /**
-    Finds all valid mul operations and multiplies them
+    Finds all valid mul operations.
+    If considerDoDonts is enabled only executes muls after dos
 */
-function mutliplyValidMulSequences(instructions: string): number {
-  const mulRegex: RegExp = /mul\(\d+,\d+\)/g;
-  const matches: RegExpMatchArray | null = instructions.match(mulRegex);
-  let sum: number = 0;
-
-  if (matches) {
-    for (const match of matches) {
-      sum += evalMul(match);
-    }
-  }
-  return sum;
-}
-
-/**
-    Finds all valid mul operations considering dos and donts and mutliplies them
-*/
-function mutliplyValidEnabledMulSequences(instructions: string) {
-  const combinedRegex: RegExp = /do\(\)|don't\(\)|mul\(\d+,\d+\)/g;
+function mutliplyValidMulSequences(
+  instructions: string,
+  considerDoDonts: boolean = false
+) {
+  let regex: RegExp = /mul\(\d+,\d+\)/g;
+  if (considerDoDonts) regex = /do\(\)|don't\(\)|mul\(\d+,\d+\)/g;
   let result: RegExpExecArray | null;
 
   let currentlyDo: boolean = true;
   let sum: number = 0;
-  while ((result = combinedRegex.exec(instructions)) !== null) {
+  while ((result = regex.exec(instructions)) !== null) {
     switch (result[0]) {
       case "do()":
         currentlyDo = true;
@@ -52,5 +41,5 @@ function mutliplyValidEnabledMulSequences(instructions: string) {
 
 console.log(`Part 1 solution: ${mutliplyValidMulSequences(instructions)}`);
 console.log(
-  `Part 2 solution: ${mutliplyValidEnabledMulSequences(instructions)}`
+  `Part 2 solution: ${mutliplyValidMulSequences(instructions, true)}`
 );
