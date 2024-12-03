@@ -1,4 +1,3 @@
-import internal = require("stream");
 import { FileReader } from "../utils";
 
 type Interval = [number, number];
@@ -35,28 +34,35 @@ const getDoIntervals = (
   instructionsLen: number
 ): Interval[] => {
   const activeIntervals: Interval[] = [];
-  let doIdx = 0;
-  let dontIdx = 0;
+  let doPointer = 0;
+  let dontPointer = 0;
 
-  while (doIdx < doIndices.length) {
-    const doStart = doIndices[doIdx];
+  while (doPointer < doIndices.length) {
+    const doStart = doIndices[doPointer];
 
-    while (dontIdx < dontIndices.length && dontIndices[dontIdx] <= doStart) {
-      dontIdx++;
+    // find first dont that is bigger than current do
+    while (
+      dontPointer < dontIndices.length &&
+      dontIndices[dontPointer] <= doStart
+    ) {
+      dontPointer++;
+      if (dontPointer === dontIndices.length) {
+        activeIntervals.push([doStart, instructionsLen]);
+        // if no more donts are present we have found the last interval and can break
+        break;
+      }
     }
 
-    // If a don't is found after a do or no dont is found anymore, create an interval
-    if (dontIdx < dontIndices.length) {
-      activeIntervals.push([doStart, dontIndices[dontIdx]]);
-    } else {
-      activeIntervals.push([doStart, instructionsLen]);
-      // if no more donts are present we have found the last interval and can break
-      break;
-    }
+    // If a don't is found after a do create an interval between those two
+    activeIntervals.push([doStart, dontIndices[dontPointer]]);
 
-    // Move to the next do index
-    dontIdx++;
-    doIdx++;
+    // Move to the next do index (bigger than last used dontPointer)
+    while (
+      doIndices[doPointer] <= activeIntervals[activeIntervals.length - 1][1] &&
+      doPointer < doIndices.length
+    ) {
+      doPointer++;
+    }
   }
 
   return activeIntervals;
