@@ -26,75 +26,27 @@ function mutliplyValidMulSequences(instructions: string): number {
 }
 
 /**
-    Returns all intervals where do is active
-*/
-const getDoIntervals = (
-  doIndices: number[],
-  dontIndices: number[],
-  instructionsLen: number
-): Interval[] => {
-  const activeIntervals: Interval[] = [];
-  let doPointer = 0;
-  let dontPointer = 0;
-
-  while (doPointer < doIndices.length) {
-    const doStart = doIndices[doPointer];
-
-    // find first dont that is bigger than current do
-    while (
-      dontPointer < dontIndices.length &&
-      dontIndices[dontPointer] <= doStart
-    ) {
-      dontPointer++;
-      if (dontPointer === dontIndices.length) {
-        activeIntervals.push([doStart, instructionsLen]);
-        // if no more donts are present we have found the last interval and can break
-        break;
-      }
-    }
-
-    // If a don't is found after a do create an interval between those two
-    activeIntervals.push([doStart, dontIndices[dontPointer]]);
-
-    // Move to the next do index (bigger than last used dontPointer)
-    while (
-      doIndices[doPointer] <= activeIntervals[activeIntervals.length - 1][1] &&
-      doPointer < doIndices.length
-    ) {
-      doPointer++;
-    }
-  }
-
-  return activeIntervals;
-};
-
-/**
     Finds all valid mul operations considering dos and donts and mutliplies them
 */
 function mutliplyValidEnabledMulSequences(instructions: string) {
-  const doRegex: RegExp = /do\(\)/g;
-  const dontRegex: RegExp = /don't\(\)/g;
+  const combinedRegex: RegExp = /do\(\)|don't\(\)|mul\(\d+,\d+\)/g;
   let result: RegExpExecArray | null;
-  let doIndices = [0];
-  let dontIndices = [];
 
-  while ((result = doRegex.exec(instructions)) !== null) {
-    doIndices.push(result.index);
-  }
-  while ((result = dontRegex.exec(instructions)) !== null) {
-    dontIndices.push(result.index);
-  }
-
+  let currentlyDo: boolean = true;
   let sum: number = 0;
-  for (const interval of getDoIntervals(
-    doIndices,
-    dontIndices,
-    instructions.length
-  ))
-    sum += mutliplyValidMulSequences(
-      instructions.slice(interval[0], interval[1])
-    );
-
+  while ((result = combinedRegex.exec(instructions)) !== null) {
+    switch (result[0]) {
+      case "do()":
+        currentlyDo = true;
+        break;
+      case "don't()":
+        currentlyDo = false;
+        break;
+      default:
+        if (currentlyDo) sum += evalMul(result[0]);
+        break;
+    }
+  }
   return sum;
 }
 
