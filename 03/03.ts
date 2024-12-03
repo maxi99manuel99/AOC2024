@@ -22,6 +22,7 @@ function mutliplyValidMulSequences(
   let result: RegExpExecArray | null;
   let currentlyDo: boolean = true;
   let sum: number = 0;
+
   while ((result = regex.exec(instructions)) !== null) {
     switch (result[0]) {
       case "do()":

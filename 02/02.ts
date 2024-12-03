@@ -31,7 +31,6 @@ function calculateNumValidReports(
   allowOneLvlRemove: boolean = false
 ): number {
   let validReportSum = 0;
-
   for (const report of reports) {
     let valid = isValidReport(report);
 
