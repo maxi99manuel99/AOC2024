@@ -9,7 +9,6 @@ let reports: number[][] = FileReader.readAllRows("input.txt", (value) =>
 */
 function isValidReport(report: number[]): boolean {
   let increasing: boolean = true;
-
   return report.every((value, idx) => {
     if (idx === report.length - 1) return true;
 

@@ -20,7 +20,6 @@ function mutliplyValidMulSequences(
   let regex: RegExp = /mul\(\d+,\d+\)/g;
   if (considerDoDonts) regex = /do\(\)|don't\(\)|mul\(\d+,\d+\)/g;
   let result: RegExpExecArray | null;
-
   let currentlyDo: boolean = true;
   let sum: number = 0;
   while ((result = regex.exec(instructions)) !== null) {
