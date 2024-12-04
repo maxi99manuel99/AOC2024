@@ -7,6 +7,9 @@ let map: string[][] = FileReader.readAs2DMap("input.txt", "");
 const height = map.length;
 const width = map[0].length;
 
+/**
+    Finds and counts occurances of the string XMAS in any direction (also diagonal) in a 2D char map
+ */
 function getXMasCount(map: string[][]) {
   let xmasCount: number = 0;
 
@@ -84,6 +87,13 @@ function getXMasCount(map: string[][]) {
   return xmasCount;
 }
 
+/**
+    Finds  and counts occurances of
+    M   M
+      A
+    S   S
+    in any rotation in a 2D char map 
+ */
 function getXMasCountX(map: string[][]) {
   let xmasCount: number = 0;
 
