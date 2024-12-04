@@ -1,7 +1,5 @@
 import { FileReader } from "../utils";
 
-type Interval = [number, number];
-
 const instructions = FileReader.readAsSingleString("input.txt");
 
 function evalMul(mulStr: string): number {
