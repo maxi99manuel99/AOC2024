@@ -1,6 +1,6 @@
 import { FileReader } from "../utils";
 
-let reports: number[][] = FileReader.readAllRows("input.txt", (value) =>
+let reports: number[][] = FileReader.readAs2DMap("input.txt", /\s+/, (value) =>
   Number(value)
 );
 

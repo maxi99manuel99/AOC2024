@@ -34,12 +34,13 @@ class FileReader {
     return { leftColumn, rightColumn };
   }
   /**
-    Function to read rows from an input file, where each row is split into a list of entries.
+    Function to read rows and columns from an input file as a 2D map.
     Supports using a transformer to modify read values (e.g. casting the type of the values). 
     If no transform is given, values will remain as their original strings.
   */
-  static readAllRows<T>(
+  static readAs2DMap<T>(
     filePath: string,
+    colSplitCriteria: RegExp | string,
     transform: (value: string) => T = (value: string) => value as T
   ): T[][] {
     const fileContent = readFileSync(filePath, "utf-8");
@@ -48,7 +49,7 @@ class FileReader {
     const lines = fileContent.trim().split("\n");
 
     const rows: T[][] = lines.map((line) => {
-      const entries = line.split(/\s+/); // Split by whitespace
+      const entries = line.split(colSplitCriteria); // Split the cols by the given criteria
       return entries.map(transform); // Apply transform to each entry
     });
 
