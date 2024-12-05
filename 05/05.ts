@@ -1,3 +1,4 @@
+import { connect } from "http2";
 import { FileReader } from "../utils";
 
 /**
@@ -10,28 +11,20 @@ function sumCorrectPrints(
   let correctSum = 0;
   let incorrectSum = 0;
   for (const update of updates) {
-    let visited = new Map<number, boolean>();
-    let mutliplier = 1;
     let correctedUpdate = Object.assign([], update);
-    for (const page of update) {
-      visited.set(page, true);
-      const visitAfter: number[] | undefined = rulesVisitAfter.get(page);
-      if (visitAfter) {
-        const badVisitIndices: number[] = visitAfter
-          .filter((entry) => visited.get(entry))
-          .map((entry) => correctedUpdate.indexOf(entry));
-        if (badVisitIndices.length > 0) {
-          mutliplier = 0;
-          const minIdx: number = Math.min(...badVisitIndices);
-          correctedUpdate.splice(correctedUpdate.indexOf(page), 1);
-          correctedUpdate.splice(minIdx, 0, page);
-        }
+    // sort via rules
+    correctedUpdate.sort((a, b) => {
+      if (rulesVisitAfter.get(a)?.includes(b)) {
+        return -1;
       }
-    }
-    correctSum += mutliplier * update[Math.floor(update.length / 2)];
-    incorrectSum +=
-      (1 - mutliplier) *
-      correctedUpdate[Math.floor(correctedUpdate.length / 2)];
+      return 1;
+    });
+
+    // check if anything has changed during the sort
+    if (correctedUpdate.every((value, index) => value === update[index]))
+      correctSum += update[Math.floor(update.length / 2)];
+    else
+      incorrectSum += correctedUpdate[Math.floor(correctedUpdate.length / 2)];
   }
   return { correctSum: correctSum, incorrectSum: incorrectSum };
 }
