@@ -5,7 +5,7 @@ import { FileReader } from "../utils";
  */
 function sumCorrectPrints(
   updates: number[][],
-  rulesVisitAfter: Map<number, number[]>
+  rulesVisitAfter: Map<number, Set<number>>
 ) {
   let correctSum = 0;
   let incorrectSum = 0;
@@ -13,7 +13,7 @@ function sumCorrectPrints(
     let correctedUpdate = Object.assign([], update);
     // sort via rules
     correctedUpdate.sort((a, b) => {
-      if (rulesVisitAfter.get(a)?.includes(b)) {
+      if (rulesVisitAfter.get(a)?.has(b)) {
         return -1;
       }
       return 1;
@@ -30,7 +30,7 @@ function sumCorrectPrints(
 
 const rulesAndUpdates = FileReader.ReadRowByRow("input.txt");
 let updates: number[][] = [];
-let rulesVisitAfter = new Map<number, number[]>();
+let rulesVisitAfter = new Map<number, Set<number>>();
 let readingRules: boolean = true;
 for (const entry of rulesAndUpdates) {
   if (entry === "") readingRules = false;
@@ -40,7 +40,7 @@ for (const entry of rulesAndUpdates) {
     const after: number = rule[1];
     rulesVisitAfter.set(
       before,
-      (rulesVisitAfter.get(before) || []).concat(after)
+      (rulesVisitAfter.get(before) || new Set<number>()).add(after)
     );
   } else {
     updates.push(entry.split(",").map(Number));
