@@ -1,7 +1,4 @@
-import { Dir } from "fs";
 import { FileReader } from "../utils";
-
-type Index = [number, number];
 
 let map: string[][] = FileReader.readAs2DMap("input.txt", "");
 const height = map.length;

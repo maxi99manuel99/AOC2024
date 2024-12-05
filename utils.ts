@@ -5,6 +5,10 @@ class FileReader {
     return readFileSync(filePath, "utf-8");
   }
 
+  static ReadRowByRow(filePath: string) {
+    return readFileSync(filePath, "utf-8").trim().split("\n");
+  }
+
   /** 
     Function to read two columns from an input file as separate lists and returns an object of left and right column.
     Supports using a transformer to modify read values (e.g casting the type of the values). If no transform is given values will stay as the original strings.
