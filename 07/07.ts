@@ -11,6 +11,9 @@ interface QueueItem {
   equationIdx: number;
 }
 
+/**
+  Evaluates if an equation is solvable using *, + and optional concat operations
+ */
 function checkSolvable(equation: Equation, allowConcat: boolean = false) {
   let queue = new PriorityQueue({
     comparator: function (a: QueueItem, b: QueueItem) {
@@ -42,9 +45,11 @@ function checkSolvable(equation: Equation, allowConcat: boolean = false) {
         equationIdx: newIdx,
       });
       if (allowConcat) {
-        const newPartialResultConcat = Number(
-          "" + biggestPartResultItem.partialResult + equation.numbers[newIdx]
-        );
+        const magnitude = Math.log10(equation.numbers[newIdx]);
+        const shifted =
+          biggestPartResultItem.partialResult *
+          Math.pow(10, Math.floor(magnitude + 1));
+        const newPartialResultConcat = shifted + equation.numbers[newIdx];
         queue.queue({
           partialResult: newPartialResultConcat,
           equationIdx: newIdx,
