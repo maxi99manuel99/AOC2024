@@ -90,8 +90,6 @@ function getChckSumMoveFileBlocks(
 const diskInput = FileReader.readAsSingleString("input.txt");
 
 let diskArray: string[] = [];
-let rightMostFileIdx: number = 0;
-let leftMostFreeIdx: number = Number(diskInput[0]);
 let freeBlocks: Block[] = [];
 let fileBlocks: Block[] = [];
 
@@ -100,22 +98,23 @@ for (let i = 0; i < diskInput.length; i++) {
     const id: string = "" + i / 2;
     const amountFile = Number(diskInput[i]);
     diskArray.push(...Array(amountFile).fill(id));
-    rightMostFileIdx = diskArray.length - 1;
     fileBlocks.push({
       startIdx: diskArray.length - amountFile,
       size: amountFile,
     });
-  } else {
+    // ignore trailing free space
+  } else if (i !== diskInput.length - 1) {
     const amountFree = Number(diskInput[i]);
     diskArray.push(...Array(amountFree).fill("."));
-    // ignore trailing free space
-    if (i !== diskInput.length - 1)
-      freeBlocks.push({
-        startIdx: diskArray.length - amountFree,
-        size: amountFree,
-      });
+    freeBlocks.push({
+      startIdx: diskArray.length - amountFree,
+      size: amountFree,
+    });
   }
 }
+
+let leftMostFreeIdx: number = Number(diskInput[0]);
+let rightMostFileIdx: number = diskArray.length - 1;
 
 console.log(
   `Part 1 solution: ${getChckSumMoveSingleFile(
