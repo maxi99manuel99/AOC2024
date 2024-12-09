@@ -43,6 +43,8 @@ function getChckSumMoveFileBlocks(
   fileBlocks: Block[]
 ) {
   let diskArray = Object.assign([], diskArr);
+  // fileBlocks are needed in reverse order to move from the right to the left
+  fileBlocks.sort((a, b) => b.startIdx - a.startIdx);
 
   fileBlocks.forEach((fileBlock) => {
     // find will find the first occurance that matches the criteria
@@ -96,8 +98,7 @@ for (let i = 0; i < diskInput.length; i++) {
     const amountFile = Number(diskInput[i]);
     diskArray.push(...Array(amountFile).fill(id));
     rightMostFileIdx = diskArray.length - 1;
-    // fileBlocks are needed in reverse ID order for movings blocks so use unshift to add to the front
-    fileBlocks.unshift({
+    fileBlocks.push({
       startIdx: diskArray.length - amountFile,
       size: amountFile,
     });
@@ -106,7 +107,6 @@ for (let i = 0; i < diskInput.length; i++) {
     diskArray.push(...Array(amountFree).fill("."));
     // ignore trailing free space
     if (i !== diskInput.length - 1)
-      // freeBlocks are needed in ID order for moving blocks to use find efficiently for finding the first block that has enough space
       freeBlocks.push({
         startIdx: diskArray.length - amountFree,
         size: amountFree,
