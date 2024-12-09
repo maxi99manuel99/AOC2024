@@ -16,6 +16,7 @@ function getChckSumMoveSingleFile(
   let diskArray = Object.assign([], diskArr);
 
   while (leftMostFreeIdx < rightMostFileIdx) {
+    // swap values at the indices
     [diskArray[leftMostFreeIdx], diskArray[rightMostFileIdx]] = [
       diskArray[rightMostFileIdx],
       diskArray[leftMostFreeIdx],
@@ -59,6 +60,7 @@ function getChckSumMoveFileBlocks(
       const freeBlock = freeBlocks[freeSpaceIdx];
 
       for (let i = 0; i < fileBlock.size; i++) {
+        // swap values at the indices
         [diskArray[fileBlock.startIdx + i], diskArray[freeBlock.startIdx + i]] =
           [
             diskArray[freeBlock.startIdx + i],
@@ -70,6 +72,7 @@ function getChckSumMoveFileBlocks(
       freeBlock.startIdx += fileBlock.size;
 
       if (freeBlock.size === 0) {
+        // remove the freeBlock because it has no space left
         freeBlocks.splice(freeSpaceIdx, 1);
       }
     }
