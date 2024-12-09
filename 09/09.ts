@@ -9,12 +9,10 @@ interface Block {
     Calculates the checksum of the file system after all single files are moved to free space on the left
  */
 function getChckSumMoveSingleFile(
-  diskArr: string[],
+  diskArray: number[],
   leftMostFreeIdx: number,
   rightMostFileIdx: number
 ) {
-  let diskArray = Object.assign([], diskArr);
-
   while (leftMostFreeIdx < rightMostFileIdx) {
     // swap values at the indices
     [diskArray[leftMostFreeIdx], diskArray[rightMostFileIdx]] = [
@@ -22,14 +20,14 @@ function getChckSumMoveSingleFile(
       diskArray[leftMostFreeIdx],
     ];
 
-    while (diskArray[leftMostFreeIdx] !== ".") leftMostFreeIdx++;
-    while (diskArray[rightMostFileIdx] === ".") rightMostFileIdx--;
+    while (diskArray[leftMostFreeIdx] !== -1) leftMostFreeIdx++;
+    while (diskArray[rightMostFileIdx] === -1) rightMostFileIdx--;
   }
 
   let chkSum: number = 0;
 
   for (let i = 0; i <= rightMostFileIdx; i++) {
-    chkSum += i * Number(diskArray[i]);
+    chkSum += i * diskArray[i];
   }
 
   return chkSum;
@@ -39,11 +37,10 @@ function getChckSumMoveSingleFile(
     Calculates the checksum of the file system after all file blocks are moved to free space on their left
  */
 function getChckSumMoveFileBlocks(
-  diskArr: string[],
+  diskArray: number[],
   freeBlocks: Block[],
   fileBlocks: Block[]
 ) {
-  let diskArray = Object.assign([], diskArr);
   // fileBlocks are needed in reverse order of their indices to move blocks from the right to the left
   fileBlocks.sort((a, b) => b.startIdx - a.startIdx);
   // freeblocks are needed in order of their indices so findIndex will always find the left most freeBlock
@@ -93,13 +90,13 @@ function getChckSumMoveFileBlocks(
 
 const diskInput = FileReader.readAsSingleString("input.txt");
 
-let diskArray: string[] = [];
+let diskArray: number[] = [];
 let freeBlocks: Block[] = [];
 let fileBlocks: Block[] = [];
 
 for (let i = 0; i < diskInput.length; i++) {
   if (i % 2 == 0) {
-    const id: string = "" + i / 2;
+    const id: number = i / 2;
     const amountFile = Number(diskInput[i]);
     diskArray.push(...Array(amountFile).fill(id));
     fileBlocks.push({
@@ -109,7 +106,7 @@ for (let i = 0; i < diskInput.length; i++) {
     // ignore trailing free space
   } else if (i !== diskInput.length - 1) {
     const amountFree = Number(diskInput[i]);
-    diskArray.push(...Array(amountFree).fill("."));
+    diskArray.push(...Array(amountFree).fill(-1));
     freeBlocks.push({
       startIdx: diskArray.length - amountFree,
       size: amountFree,
@@ -122,7 +119,7 @@ let rightMostFileIdx: number = diskArray.length - 1;
 
 console.log(
   `Part 1 solution: ${getChckSumMoveSingleFile(
-    diskArray,
+    Object.assign([], diskArray),
     leftMostFreeIdx,
     rightMostFileIdx
   )}`
