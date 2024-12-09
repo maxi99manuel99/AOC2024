@@ -61,19 +61,18 @@ function getChckSumMoveFileBlocks(
     );
 
     const Id = diskArray[fileBlock.startIdx];
-    let newBlockIdx = fileBlock.startIdx;
+    let newBlockStartIdx = fileBlock.startIdx;
 
     if (freeSpaceIdx !== -1) {
       const freeBlock = freeBlocks[freeSpaceIdx];
-      newBlockIdx = freeBlock.startIdx;
+      newBlockStartIdx = freeBlock.startIdx;
 
       for (let i = 0; i < fileBlock.size; i++) {
         // swap values at the indices
-        [diskArray[fileBlock.startIdx + i], diskArray[freeBlock.startIdx + i]] =
-          [
-            diskArray[freeBlock.startIdx + i],
-            diskArray[fileBlock.startIdx + i],
-          ];
+        [diskArray[fileBlock.startIdx + i], diskArray[newBlockStartIdx + i]] = [
+          diskArray[newBlockStartIdx + i],
+          diskArray[fileBlock.startIdx + i],
+        ];
       }
 
       freeBlock.size -= fileBlock.size;
@@ -85,7 +84,7 @@ function getChckSumMoveFileBlocks(
       }
     }
     for (let i = 0; i < fileBlock.size; i++) {
-      chkSum += (newBlockIdx + i) * Id;
+      chkSum += (newBlockStartIdx + i) * Id;
     }
   });
 
