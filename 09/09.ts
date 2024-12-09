@@ -49,6 +49,8 @@ function getChckSumMoveFileBlocks(
   // freeblocks are needed in order of their indices so findIndex will always find the left most freeBlock
   freeBlocks.sort((a, b) => a.startIdx - b.startIdx);
 
+  let chkSum: number = 0;
+
   fileBlocks.forEach((fileBlock) => {
     // find will find the first occurance that matches the criteria
     // since the freeBlocks are ordered from lowerIdx to higher this will find the lowest guaranteed
@@ -68,6 +70,7 @@ function getChckSumMoveFileBlocks(
             diskArray[freeBlock.startIdx + i],
             diskArray[fileBlock.startIdx + i],
           ];
+        chkSum += (freeBlock.startIdx + i) * diskArray[freeBlock.startIdx + i];
       }
 
       freeBlock.size -= fileBlock.size;
@@ -77,14 +80,12 @@ function getChckSumMoveFileBlocks(
         // remove the freeBlock because it has no space left
         freeBlocks.splice(freeSpaceIdx, 1);
       }
+    } else {
+      for (let i = 0; i < fileBlock.size; i++) {
+        chkSum += (fileBlock.startIdx + i) * diskArray[fileBlock.startIdx + i];
+      }
     }
   });
-
-  let chkSum: number = 0;
-
-  for (let i = 0; i < diskArray.length; i++) {
-    if (diskArray[i] !== ".") chkSum += i * Number(diskArray[i]);
-  }
 
   return chkSum;
 }
