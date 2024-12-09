@@ -44,8 +44,10 @@ function getChckSumMoveFileBlocks(
   fileBlocks: Block[]
 ) {
   let diskArray = Object.assign([], diskArr);
-  // fileBlocks are needed in reverse order to move from the right to the left
+  // fileBlocks are needed in reverse order of their indices to move blocks from the right to the left
   fileBlocks.sort((a, b) => b.startIdx - a.startIdx);
+  // freeblocks are needed in order of their indices so findIndex will always find the left most freeBlock
+  freeBlocks.sort((a, b) => a.startIdx - b.startIdx);
 
   fileBlocks.forEach((fileBlock) => {
     // find will find the first occurance that matches the criteria
