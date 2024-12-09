@@ -39,21 +39,22 @@ function getChckSumMoveSingleFile(
  */
 function getChckSumMoveFileBlocks(
   diskArr: string[],
-  freeSpaces: Block[],
+  freeBlocks: Block[],
   fileBlocks: Block[]
 ) {
   let diskArray = Object.assign([], diskArr);
-  fileBlocks.sort((a, b) => b.startIdx - a.startIdx);
 
   fileBlocks.forEach((fileBlock) => {
-    const freeSpaceIdx = freeSpaces.findIndex(
+    // find will find the first occurance that matches the criteria
+    // since the freeBlocks are ordered from lowerIdx to higher this will find the lowest guaranteed
+    const freeSpaceIdx = freeBlocks.findIndex(
       (freeBlock) =>
         freeBlock.startIdx < fileBlock.startIdx &&
         freeBlock.size >= fileBlock.size
     );
 
     if (freeSpaceIdx !== -1) {
-      const freeBlock = freeSpaces[freeSpaceIdx];
+      const freeBlock = freeBlocks[freeSpaceIdx];
 
       for (let i = 0; i < fileBlock.size; i++) {
         [diskArray[fileBlock.startIdx + i], diskArray[freeBlock.startIdx + i]] =
@@ -67,7 +68,7 @@ function getChckSumMoveFileBlocks(
       freeBlock.startIdx += fileBlock.size;
 
       if (freeBlock.size === 0) {
-        freeSpaces.splice(freeSpaceIdx, 1);
+        freeBlocks.splice(freeSpaceIdx, 1);
       }
     }
   });
@@ -86,7 +87,7 @@ const diskInput = FileReader.readAsSingleString("input.txt");
 let diskArray: string[] = [];
 let rightMostFileIdx: number = 0;
 let leftMostFreeIdx: number = Number(diskInput[0]);
-let freeSpaces: Block[] = [];
+let freeBlocks: Block[] = [];
 let fileBlocks: Block[] = [];
 
 for (let i = 0; i < diskInput.length; i++) {
@@ -95,7 +96,8 @@ for (let i = 0; i < diskInput.length; i++) {
     const amountFile = Number(diskInput[i]);
     diskArray.push(...Array(amountFile).fill(id));
     rightMostFileIdx = diskArray.length - 1;
-    fileBlocks.push({
+    // fileBlocks are needed in reverse ID order for movings blocks so use unshift to add to the front
+    fileBlocks.unshift({
       startIdx: diskArray.length - amountFile,
       size: amountFile,
     });
@@ -104,7 +106,8 @@ for (let i = 0; i < diskInput.length; i++) {
     diskArray.push(...Array(amountFree).fill("."));
     // ignore trailing free space
     if (i !== diskInput.length - 1)
-      freeSpaces.push({
+      // freeBlocks are needed in ID order for moving blocks to use find efficiently for finding the first block that has enough space
+      freeBlocks.push({
         startIdx: diskArray.length - amountFree,
         size: amountFree,
       });
@@ -121,7 +124,7 @@ console.log(
 console.log(
   `Part 2 solution: ${getChckSumMoveFileBlocks(
     diskArray,
-    freeSpaces,
+    freeBlocks,
     fileBlocks
   )}`
 );
