@@ -60,6 +60,8 @@ function getChckSumMoveFileBlocks(
         freeBlock.size >= fileBlock.size
     );
 
+    const Id = diskArray[fileBlock.startIdx];
+
     if (freeSpaceIdx !== -1) {
       const freeBlock = freeBlocks[freeSpaceIdx];
 
@@ -70,7 +72,7 @@ function getChckSumMoveFileBlocks(
             diskArray[freeBlock.startIdx + i],
             diskArray[fileBlock.startIdx + i],
           ];
-        chkSum += (freeBlock.startIdx + i) * diskArray[freeBlock.startIdx + i];
+        chkSum += (freeBlock.startIdx + i) * Id;
       }
 
       freeBlock.size -= fileBlock.size;
@@ -82,7 +84,7 @@ function getChckSumMoveFileBlocks(
       }
     } else {
       for (let i = 0; i < fileBlock.size; i++) {
-        chkSum += (fileBlock.startIdx + i) * diskArray[fileBlock.startIdx + i];
+        chkSum += (fileBlock.startIdx + i) * Id;
       }
     }
   });
