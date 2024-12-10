@@ -21,7 +21,7 @@ function getTrailheadScore(
   ];
 
   let queue: Position[] = [trailheadPos];
-  let foundCount = 0;
+  let score = 0;
   const startKey = `${trailheadPos[0]}|${trailheadPos[1]}`;
   let visited = allowMultiplePaths ? null : new Set<string>([startKey]);
 
@@ -30,7 +30,7 @@ function getTrailheadScore(
     const currHeight = map[x][y];
 
     if (currHeight === 9) {
-      foundCount += 1;
+      score += 1;
     } else {
       for (const [dx, dy] of directions) {
         const newX = x + dx;
@@ -52,7 +52,7 @@ function getTrailheadScore(
     }
   }
 
-  return foundCount;
+  return score;
 }
 
 const map: number[][] = FileReader.readAs2DMap("input.txt", "", (value) =>
