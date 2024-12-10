@@ -21,21 +21,23 @@ function getTrailheadScore(
   ];
 
   let queue: Position[] = [trailheadPos];
-  let score = 0;
-  const startKey = `${trailheadPos[0]}|${trailheadPos[1]}`;
-  let visited = allowMultiplePaths ? null : new Set<string>([startKey]);
+  let score: number = 0;
+  const startKey: string = `${trailheadPos[0]}|${trailheadPos[1]}`;
+  let visited: Set<string> | null = allowMultiplePaths
+    ? null
+    : new Set<string>([startKey]);
 
   while (queue.length) {
-    const [x, y] = queue.shift()!;
-    const currHeight = map[x][y];
+    const [x, y]: Position = queue.shift()!;
+    const currHeight: number = map[x][y];
 
     if (currHeight === 9) {
       score++;
     } else {
       for (const [dx, dy] of directions) {
-        const newX = x + dx;
-        const newY = y + dy;
-        const newPosKey = `${newX}|${newY}`;
+        const newX: number = x + dx;
+        const newY: number = y + dy;
+        const newPosKey: string = `${newX}|${newY}`;
 
         if (
           !visited?.has(newPosKey) &&
@@ -59,11 +61,11 @@ const map: number[][] = FileReader.readAs2DMap("input.txt", "", (value) =>
   Number(value)
 );
 
-const mapHeight = map.length;
-const mapWidth = map[0].length;
+const mapHeight: number = map.length;
+const mapWidth: number = map[0].length;
 
 let scoreSum: number = 0;
-let scoreSumMultiplePaths = 0;
+let scoreSumMultiplePaths: number = 0;
 for (let x = 0; x < mapHeight; x++) {
   for (let y = 0; y < mapWidth; y++) {
     if (map[x][y] === 0) {
