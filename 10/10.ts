@@ -30,7 +30,7 @@ function getTrailheadScore(
     const currHeight = map[x][y];
 
     if (currHeight === 9) {
-      score += 1;
+      score++;
     } else {
       for (const [dx, dy] of directions) {
         const newX = x + dx;
