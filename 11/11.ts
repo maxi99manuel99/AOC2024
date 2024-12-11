@@ -8,16 +8,14 @@ const globalBlinkCache: Map<string, number> = new Map();
     Performs [timesToBlink] blink operations on a stone and returns the amount of stones that are created by doing so
  */
 function blinkAndCountStones(stone: string, timesToBlink: number): number {
+  if (timesToBlink === 0) return 0;
+
   const cacheKey = `${stone}:${timesToBlink}`;
 
-  if (globalBlinkCache.has(cacheKey)) {
-    return globalBlinkCache.get(cacheKey)!;
-  }
+  if (globalBlinkCache.has(cacheKey)) return globalBlinkCache.get(cacheKey)!;
 
   let stonesCreated: number;
-  if (timesToBlink === 0) {
-    stonesCreated = 1;
-  } else if (stone === "0") {
+  if (stone === "0") {
     stonesCreated = blinkAndCountStones("1", timesToBlink - 1);
   } else if (stone.length % 2 !== 0) {
     stonesCreated = blinkAndCountStones(
