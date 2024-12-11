@@ -12,7 +12,7 @@ function getChckSumMoveSingleFile(
   diskArray: number[],
   leftMostFreeIdx: number,
   rightMostFileIdx: number
-) {
+): number {
   while (leftMostFreeIdx < rightMostFileIdx) {
     // swap values at the indices
     [diskArray[leftMostFreeIdx], diskArray[rightMostFileIdx]] = [
@@ -40,7 +40,7 @@ function getChckSumMoveFileBlocks(
   diskArray: number[],
   freeBlocks: Block[],
   fileBlocks: Block[]
-) {
+): number {
   // fileBlocks are needed in reverse order of their indices to move blocks from the right to the left
   fileBlocks.sort((a, b) => b.startIdx - a.startIdx);
   // freeblocks are needed in order of their indices so findIndex will always find the left most freeBlock

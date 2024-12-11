@@ -14,7 +14,7 @@ function evalMul(mulStr: string): number {
 function mutliplyValidMulSequences(
   instructions: string,
   considerDoDonts: boolean = false
-) {
+): number {
   let regex: RegExp = /mul\(\d+,\d+\)/g;
   if (considerDoDonts) regex = /do\(\)|don't\(\)|mul\(\d+,\d+\)/g;
   let result: RegExpExecArray | null;

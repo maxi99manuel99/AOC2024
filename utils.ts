@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
 
 class FileReader {
-  static readAsSingleString(filePath: string) {
+  static readAsSingleString(filePath: string): string {
     return readFileSync(filePath, "utf-8");
   }
 
-  static ReadRowByRow(filePath: string) {
+  static ReadRowByRow(filePath: string): string[] {
     return readFileSync(filePath, "utf-8").trim().split("\n");
   }
 

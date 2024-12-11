@@ -14,7 +14,10 @@ interface QueueItem {
 /**
   Evaluates if an equation is solvable using *, + and optional concat operations
  */
-function checkSolvable(equation: Equation, allowConcat: boolean = false) {
+function checkSolvable(
+  equation: Equation,
+  allowConcat: boolean = false
+): boolean {
   let queue = new PriorityQueue({
     comparator: function (a: QueueItem, b: QueueItem) {
       return b.partialResult - a.partialResult;

@@ -12,7 +12,7 @@ function checkLoop(
   startDirection: Direction,
   mapHeight: number,
   mapWidth: number
-) {
+): boolean {
   let pos = startPos;
   let direction = startDirection;
   let visitedDirection = new Map<string, Set<string>>();
@@ -65,7 +65,7 @@ function countGuardSteps(
   startDirection: Direction,
   mapHeight: number,
   mapWidth: number
-) {
+): { visitedCount: number; loopCount: number } {
   let pos = startPos;
   let direction = startDirection;
   let visitedFields = 0;

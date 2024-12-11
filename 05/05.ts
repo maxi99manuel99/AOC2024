@@ -6,7 +6,7 @@ import { FileReader } from "../utils";
 function sumCorrectPrints(
   updates: number[][],
   rulesVisitAfter: Map<number, Set<number>>
-) {
+): { correctSum: number; incorrectSum: number } {
   let correctSum = 0;
   let incorrectSum = 0;
   for (const update of updates) {

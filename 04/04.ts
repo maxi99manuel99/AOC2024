@@ -7,7 +7,7 @@ const width = map[0].length;
 /**
     Finds and counts occurances of the string XMAS in any direction (also diagonal) in a 2D char map
  */
-function getXMasCount(map: string[][]) {
+function getXMasCount(map: string[][]): number {
   let xmasCount: number = 0;
 
   for (let x = 0; x < height; x++) {
@@ -91,7 +91,7 @@ function getXMasCount(map: string[][]) {
     S   S
     in any rotation in a 2D char map 
  */
-function getXMasCountX(map: string[][]) {
+function getXMasCountX(map: string[][]): number {
   let xmasCount: number = 0;
 
   for (let x = 1; x < height - 1; x++) {

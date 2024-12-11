@@ -17,7 +17,7 @@ function countUniqueAntiNodes(
   pairMap: Map<string, FrequencyPairs[]>,
   mapHeight: number,
   mapWidth: number
-) {
+): { strictDistance: number; inLine: number } {
   let uniqueAntinodePosStringsDistance = new Set<string>();
   let uniqueAntinodePosStringsLines = new Set<string>();
   pairMap.forEach((pairList: FrequencyPairs[], _: string) => {
