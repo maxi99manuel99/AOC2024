@@ -83,10 +83,10 @@ function discoverRegion(
   let perimeter: number = 0;
   let area: number = 1;
   let sides: number = 0;
-  let upSideMap: Map<number, Side[]> = new Map<number, Side[]>();
-  let downSideMap: Map<number, Side[]> = new Map<number, Side[]>();
-  let rightSideMap: Map<number, Side[]> = new Map<number, Side[]>();
-  let leftSideMap: Map<number, Side[]> = new Map<number, Side[]>();
+  let upSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
+  let downSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
+  let rightSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
+  let lefSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
   let queue: Position[] = [startPos];
 
   while (queue.length) {
@@ -107,13 +107,13 @@ function discoverRegion(
         perimeter += 1;
 
         if (direction === "UP") {
-          sides += updateSideMap(upSideMap, currX, currY);
+          sides += updateSideMap(upSidesByCol, currX, currY);
         } else if (direction === "DOWN") {
-          sides += updateSideMap(downSideMap, currX, currY);
+          sides += updateSideMap(downSidesByCol, currX, currY);
         } else if (direction === "RIGHT") {
-          sides += updateSideMap(rightSideMap, currY, currX);
+          sides += updateSideMap(rightSidesByCol, currY, currX);
         } else {
-          sides += updateSideMap(leftSideMap, currY, currX);
+          sides += updateSideMap(lefSidesByCol, currY, currX);
         }
       } else if (!visited.has(newPosKey)) {
         area += 1;
