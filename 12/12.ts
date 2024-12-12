@@ -83,8 +83,8 @@ function discoverRegion(
   let perimeter: number = 0;
   let area: number = 1;
   let sides: number = 0;
-  let upSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
-  let downSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
+  let topSidesByRow: Map<number, Side[]> = new Map<number, Side[]>();
+  let bottomSidesByRow: Map<number, Side[]> = new Map<number, Side[]>();
   let rightSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
   let lefSidesByCol: Map<number, Side[]> = new Map<number, Side[]>();
   let queue: Position[] = [startPos];
@@ -107,9 +107,9 @@ function discoverRegion(
         perimeter += 1;
 
         if (direction === "UP") {
-          sides += updateSideMap(upSidesByCol, currX, currY);
+          sides += updateSideMap(topSidesByRow, currX, currY);
         } else if (direction === "DOWN") {
-          sides += updateSideMap(downSidesByCol, currX, currY);
+          sides += updateSideMap(bottomSidesByRow, currX, currY);
         } else if (direction === "RIGHT") {
           sides += updateSideMap(rightSidesByCol, currY, currX);
         } else {
