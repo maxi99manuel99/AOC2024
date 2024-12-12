@@ -1,4 +1,3 @@
-import { start } from "repl";
 import { FileReader } from "../utils";
 
 type Position = [number, number];
@@ -67,7 +66,7 @@ function updateSideMap(
 }
 
 /**
-    Traverses a single region from its start and on the way calculates its properties (area, perimeter, and sides).
+    Traverses a single region from its startPos and on the way calculates its properties (area, perimeter, and sides).
     Also adds all positions of the area to the given visited set.
  */
 function discoverRegion(
