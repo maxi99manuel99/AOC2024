@@ -1,13 +1,15 @@
 import { FileReader } from "../utils";
 
-const stones = FileReader.readAs2DMap("input.txt", " ")[0] as string[];
+const stones: number[] = FileReader.readAs2DMap("input.txt", " ", (value) =>
+  Number(value)
+)[0];
 
 const globalBlinkCache: Map<string, number> = new Map();
 
 /**
     Performs [timesToBlink] blink operations on a stone and returns the amount of stones that are created by doing so
  */
-function blinkAndCountStones(stone: string, timesToBlink: number): number {
+function blinkAndCountStones(stone: number, timesToBlink: number): number {
   if (timesToBlink === 0) return 1;
 
   const cacheKey = `${stone}:${timesToBlink}`;
@@ -15,23 +17,24 @@ function blinkAndCountStones(stone: string, timesToBlink: number): number {
   if (globalBlinkCache.has(cacheKey)) return globalBlinkCache.get(cacheKey)!;
 
   let stonesCreated: number;
-  if (stone === "0") {
-    stonesCreated = blinkAndCountStones("1", timesToBlink - 1);
-  } else if (stone.length % 2 !== 0) {
-    stonesCreated = blinkAndCountStones(
-      `${Number(stone) * 2024}`,
-      timesToBlink - 1
-    );
+
+  if (stone === 0) {
+    stonesCreated = blinkAndCountStones(1, timesToBlink - 1);
   } else {
-    stonesCreated =
-      blinkAndCountStones(
-        `${Number(stone.slice(0, stone.length / 2))}`,
-        timesToBlink - 1
-      ) +
-      blinkAndCountStones(
-        `${Number(stone.slice(stone.length / 2))}`,
-        timesToBlink - 1
-      );
+    const magnitude: number = Math.floor(Math.log10(stone)) + 1;
+
+    if (magnitude % 2 !== 0) {
+      stonesCreated = blinkAndCountStones(stone * 2024, timesToBlink - 1);
+    } else {
+      const halfMagnitude: number = magnitude / 2;
+      const divisor: number = Math.pow(10, halfMagnitude);
+      const leftNumber: number = Math.floor(stone / divisor);
+      const rightNumber: number = stone % divisor;
+
+      stonesCreated =
+        blinkAndCountStones(leftNumber, timesToBlink - 1) +
+        blinkAndCountStones(rightNumber, timesToBlink - 1);
+    }
   }
 
   globalBlinkCache.set(cacheKey, stonesCreated);
