@@ -50,7 +50,7 @@ function updateSideMap(
     // The two sides need to be merged into one
     attachedSideMin.minIdx = attachedSideMax.minIdx;
     allSides.splice(allSides.indexOf(attachedSideMax), 1);
-    // Remove one side count because we previously added 1 to much
+    // Remove one side count because we previously added both of the sides which are now merged into one
     return -1;
   } else if (attachedSideMin) {
     attachedSideMin.minIdx--;
@@ -90,7 +90,7 @@ function discoverRegion(
   let queue: Position[] = [startPos];
 
   while (queue.length) {
-    const [currX, currY]: Position = queue.shift()!;
+    const [currX, currY]: Position = queue.pop()!;
 
     directionMap.forEach(([dx, dy], direction) => {
       const newX: number = currX + dx;
