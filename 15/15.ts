@@ -34,7 +34,7 @@ function attempToMove(
     canMove = newBoxPos[0] !== newX || newBoxPos[1] !== newY;
   } else if (map[newX][newY] === "[" || map[newX][newY] === "]") {
     // up and down movement for [] (2 field boxes) are more complex since we only want to move a box if both the left and the right part of the box are movable
-    // copy the map because we might need to reset moves later
+    // deep copy the map because we might need to reset moves later.
     const mapCopy: string[][] = map.map(function (arr) {
       return arr.slice();
     });
@@ -58,6 +58,7 @@ function attempToMove(
       const newBoxPos: Position = attempToMove([newX, newY], direction, map);
       canMove = newBoxPos[0] !== newX || newBoxPos[1] !== newY;
       // if the other part of the box was able to move but we are not able to reset the position to the state before the neighbor was moved
+      // the reference to the map object needs to stay the same so copy value by value
       if (!canMove) {
         for (let i = 0; i < map.length; i++) {
           for (let j = 0; j < map[0].length; j++) {
